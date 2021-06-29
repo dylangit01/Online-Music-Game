@@ -23,12 +23,12 @@ app.set('port', port);
 
 var server = http.createServer(app);
 const io = socketio(server, {
-  cors: {
-    // origin: 'http://localhost:3000',
-    origin: 'https://drop-the-beat.netlify.app',
-    // origin: '*',
-    methods: ['GET', 'POST'],
-  },
+	cors: {
+		// origin: 'http://localhost:3000',
+		origin: 'https://online-music-game.netlify.app/',
+		// origin: '*',
+		methods: ['GET', 'POST'],
+	},
 });
 
 /**

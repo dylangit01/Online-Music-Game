@@ -22,7 +22,7 @@ function App() {
       try {
         if (mounted) {
           // *** notice the "/" at the end!!!
-          const baseURL = 'https://drop-the-beat-app.herokuapp.com';
+          const baseURL = 'https://online-music-game.herokuapp.com/';
           // const res = await axios({ method: 'GET', url: '/api/playlists' });
           const res = await axios({ method: 'GET', url: `${baseURL}/api/playlists` });
           setPlaylists(res.data);
