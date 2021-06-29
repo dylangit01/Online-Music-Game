@@ -20,18 +20,26 @@ export default function Home() {
   const classes = useStyles();
 
   return (
-    <div className="home">
-      <img className="headphones-img" src="https://github.com/dylangit01/DROP-THE-BEAT/blob/ruby/feature/navbar-home/client/public/images/headphones.png?raw=true" alt="headphones" />
-      <div className="call-to-action">
-        <div>
-          <p className="question">WANT TO HOST A GAME?</p>
-          <Button variant="contained" className={classes.button} endIcon={<QueueMusicIcon />}><Link to="/playlists">Select a Playlist</Link></Button>
-        </div>
-        <div>
-          <p className="question">HAVE A GAME CODE?</p>
-          <Button variant="contained" className={classes.button} endIcon={<ExitToAppOutlinedIcon />}>Join A Game</Button>
-        </div>
-      </div>
-    </div>
-  );
+		<div className='home'>
+			<img
+				className='headphones-img'
+				src='https://github.com/dylangit01/DROP-THE-BEAT/blob/ruby/feature/navbar-home/client/public/images/headphones.png?raw=true'
+				alt='headphones'
+			/>
+			<div className='call-to-action'>
+				<div>
+					<p className='question'>WANT TO HOST A GAME?</p>
+					<Button variant='contained' className={classes.button} endIcon={<QueueMusicIcon />}>
+						<Link to='/playlists'>Select a Playlist</Link>
+					</Button>
+				</div>
+				<div>
+					<p className='question'>HAVE A GAME CODE?</p>
+					<Button variant='contained' className={classes.button} endIcon={<ExitToAppOutlinedIcon />}>
+						<Link to='/playlists'>Join A Game</Link>
+					</Button>
+				</div>
+			</div>
+		</div>
+	);
 }
