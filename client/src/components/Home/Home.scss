@@ -1,0 +1,40 @@
+.home {
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .headphones-img {
+    width: 65vmin;
+    opacity: 0.6;
+    animation: 1.5s ease 0s infinite beat;
+  }
+
+  .call-to-action {
+    width: 80vmin;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1vmin;
+    
+    .question {
+      text-shadow: 0px 0px 5px white;
+    }
+
+  }
+}
+
+// Also used for trophy animation
+@keyframes beat {
+  0%,
+  50%,
+  100% {
+    transform: scale(1, 1);
+    opacity: 0.9;
+  }
+  30%,
+  80% {
+    transform: scale(0.92, 0.95);
+    opacity: 0.7;
+  }
+}

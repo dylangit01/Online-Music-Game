@@ -1,0 +1,59 @@
+.playlist-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  width: 100vw;
+
+  .playlist-name {
+    position: relative;
+    bottom: 8vh;
+    text-shadow: 0px 0px 5px white;
+  }
+  
+  .playlist-page-container {
+    display: flex;
+    width: 100vw;
+    justify-content: center;
+  }
+
+  .playlist-page-left {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    height: inherit;
+    width: 30vw;
+    margin-right: 8rem;
+
+    img {
+      width: inherit;
+      border-radius: 16px;
+      //box-shadow: 0px 0px 15px #0a0a0a;
+    }
+  }
+
+  .playlist-page-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 30vw;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 16px;
+
+    .songs-section {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .game-code-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3vh;
+    }
+  }
+}

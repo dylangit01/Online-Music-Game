@@ -1,0 +1,279 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('server:server');
+var http = require('http');
+const socketio = require('socket.io');
+const { log } = require('console');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3001');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+const io = socketio(server, {
+  cors: {
+    // origin: 'http://localhost:3000',
+    origin: 'https://drop-the-beat.netlify.app',
+    // origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
+
+/**
+ * Socket Connection
+ */
+
+// Random color:
+const randomColor = () => {
+  const randomColorArr = [
+    '#e1701a',
+    // '#98acf8',
+    '#a6f6f1',
+    '#ffcb74',
+    '#ff8474',
+    '#00ead3',
+    // '#77acf1',
+    '#efbbcf',
+    // '#f54748',
+    '#7868e6',
+    '#f7fd04',
+    // '#ff0004',
+    // '#033fff',
+  ];
+  return randomColorArr[Math.floor(Math.random() * randomColorArr.length)];
+};
+
+// Get all users:
+const getAllUsers = (sockets) => {
+  const users = [];
+  const connections = sockets.values();
+  for (const item of connections) {
+    users.push({
+      name: item.name,
+      id: item.id,
+      color: item.color,
+      score: item.score,
+      isHost: item.isHost,
+    });
+  }
+  // set up the first user as a host
+  users[0].isHost = true;
+  users[0].name = 'DJ Dylan';
+  return users;
+};
+
+let currentSongName = '';
+let guessSongName = '';
+
+io.on('connection', (socket) => {
+  console.log('New user connected!');
+
+  // set up default name for user
+  const randomNumber = Math.floor(Math.random() * 16777215).toString(16);
+  const name = 'USER_' + randomNumber;
+  const color = randomColor();
+  const id = socket.id;
+  const score = 0;
+  const isHost = false;
+  const msgColor = '';
+
+  socket.name = name;
+  socket.color = color;
+  socket.score = score;
+  socket.isHost = isHost;
+  socket.msgColor = msgColor;
+
+  const users = getAllUsers(io.sockets.sockets);
+  const numberOfUsers = users.length;
+
+  // Emit to connected user only
+  if (numberOfUsers === 1) {
+    // Emit host properties (hard-coded) if it's the first user
+    socket.emit('INITIAL_CONNECTION', {
+      id,
+      name: 'DJ Dylan',
+      color,
+      score,
+      users,
+      isHost: true,
+      msgColor,
+    }); // Only emits to connected user
+  } else {
+    // Emit player properties if it's not the first user who connects
+    socket.emit('INITIAL_CONNECTION', {
+      id,
+      name,
+      color,
+      score,
+      users,
+      isHost,
+      msgColor,
+    }); // Only emits to connected user
+  }
+
+  // Emit to all users except connected user
+  socket.broadcast.emit('NEW_USER', {
+    name,
+    id: socket.id,
+    color,
+    score,
+    isHost,
+    msgColor,
+  });
+
+  // WHEN A PLAYER CLICKS CHANGE NAME
+  socket.on('CHANGE_NAME', ({ color, msg }) => {
+    // Get the name from the input and update socket's name
+    const newName = msg;
+    socket.name = newName;
+
+    // Hard-coded colours for demo purposes
+    if (newName.toLowerCase().includes('ruby')) {
+      socket.color = '#FF7F7F';
+    } else if (newName.toLowerCase().includes('nelly')) {
+      socket.color = '#98acf8';
+    }
+    // Get the updated users array
+    const users = getAllUsers(io.sockets.sockets);
+    socket.emit('CHANGE_NAME', { name: newName, color: socket.color, users }); // Emit update only to user that sent it
+    socket.broadcast.emit('USER_NAME_CHANGE', { users }); // Emit update to all users
+  });
+
+  // WHEN A HOST CLICKS START GAME
+  socket.on('START_GAME', (msg) => {
+    console.log('Game started!');
+
+    // Send to front end the game has started
+    io.emit('START_GAME', { msg });
+    currentSongName = msg.msg.song.toLowerCase();
+  });
+
+  // WHEN A HOST CLICKS NEXT ROUND
+  socket.on('NEXT_ROUND', ({ msg }) => {
+    if (msg) {
+      currentSongName = msg.toLowerCase();
+    }
+
+    // Send to front end it's the next round
+    io.emit('NEXT_ROUND', { msg });
+  });
+
+  // WHEN ROUND HAS FINISHED AND NO ONE HAS GUESSED THE SONG
+  socket.on('SONG_FINISHED', ({ msg }) => {
+    // Reset song name so that no one can get correct answer after the song is revealed
+    currentSongName = '';
+  });
+
+  // WHEN USERS GUESS SONG NAME
+  socket.on('SEND_MESSAGE', (msg) => {
+    // io.emit('SEND_MESSAGE', { ...msg, id: 'xxx' }); // This might need to be moved to be included in correct_guess/incorrect_guess
+    guessSongName = msg.msg.toLowerCase();
+
+    // Send to front end if there's a correct guess
+    if (guessSongName === currentSongName) {
+      // Reset local current song so that no one else guessing after will get it
+      currentSongName = '';
+
+      // Update score and message color for user with correct answer
+      socket.score += 1;
+      socket.msgColor = '#54e346';
+      const users = getAllUsers(io.sockets.sockets);
+
+      socket.emit('UPDATE_USER_SCORE', { score: socket.score }); // Emit update only to user that sent it
+      io.emit('CORRECT_GUESS', {
+        ...msg,
+        score: socket.score,
+        msgColor: socket.msgColor,
+        users,
+      });
+    } else {
+      // Send to front end if there's an incorrect guess
+      socket.msgColor = '#fff';
+      io.emit('INCORRECT_GUESS', { ...msg, msgColor: socket.msgColor });
+    }
+  });
+
+  // WHEN A USER DISCONNECTS
+  socket.on('disconnect', () => {
+    io.emit('DISCONNECT_USER', { name: socket.name, id: socket.id });
+  });
+});
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port, () => {
+  console.log(`Server is running on ${port}`);
+});
+
+server.on('error', onError);
+server.on('listening', onListening);
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  debug('Listening on ' + bind);
+}

@@ -1,0 +1,17 @@
+body {
+  background-image: url(https://github.com/dylangit01/DROP-THE-BEAT/blob/Dylan/feature-16-Rating/client/public/images/backgrounds/starry-night-2.jpg?raw=true);
+  background-size: cover;
+  color: white;
+  margin-top: 10vh;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+
+.App {
+  text-align: center;
+  min-height: 90vh;
+  /* height: 100%; */
+}

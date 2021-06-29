@@ -1,0 +1,29 @@
+.round-unknown {
+  display: flex;
+  justify-content: center;
+  position: relative;
+
+  div {
+    position: relative;
+    // background-color: #505050;
+    opacity: 0.75;
+    height: 25vw;
+    width: 25vw;
+    border-radius: 16px;
+    animation: fade-in 3s;
+
+    .disc {
+      width: inherit;
+      animation: 2s linear 0s infinite spin;
+    }
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

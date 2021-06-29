@@ -1,0 +1,35 @@
+// @import url('https://fonts.googleapis.com/css2?family=Quantico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Kaushan+Script&display=swap');
+
+.score-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  height: 11vh;
+  width: fit-content;
+  min-width: 80%;
+  background-color: rgba(191, 191, 191, 0.2);
+  // opacity: 40%;
+  border-radius: 16px;
+  margin: 1vh;
+  // margin-bottom: 0;
+  color: #fff;
+  // background-image: url('../../../assets/vsfontdesign.png');
+  // background-size: contain;
+  padding: 2%;
+
+  .scoreDetail {
+    display: flex;
+    flex-direction: column;
+    height: 10vh;
+    justify-content: space-around;
+    align-items: center;
+    min-width: 40%;
+    // padding: 0 10px;
+  }
+
+  .versus {
+    font-family: 'Kaushan Script', sans-serif;
+  }
+}

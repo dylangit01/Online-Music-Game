@@ -1,0 +1,9 @@
+DROP TABLE IF EXISTS playlists CASCADE;
+
+CREATE TABLE playlists(
+    id SERIAL PRIMARY KEY NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    image_url VARCHAR(255) NOT NULL,
+    rating DECIMAL,
+    user_id INTEGER REFERENCES users(id) ON DELETE CASCADE
+);

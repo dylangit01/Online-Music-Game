@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS playlists_songs CASCADE;
+
+CREATE TABLE playlists_songs(
+    id SERIAL PRIMARY KEY NOT NULL,
+    song_id INTEGER REFERENCES songs(id) ON DELETE CASCADE,
+    playlist_id INTEGER REFERENCES playlists(id) ON DELETE CASCADE
+);

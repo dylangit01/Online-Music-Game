@@ -1,0 +1,42 @@
+.messageContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.messageInput button {
+  margin: 20px;
+  padding: 10px;
+}
+
+.messageInput input {
+  font-size: 16px;
+  padding: 3px;
+}
+
+.chat-input-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  // position: absolute;
+  // margin: 8vh 0 1vh 0;
+  height: 5vh;
+  width: 28vw;
+  background-color: rgba(191, 191, 191, 0.2);
+  border-radius: 20px;
+
+  .chat-input {
+    border: none;
+    margin: 5%;
+    color: #fff;
+    width: 60%;
+    background-color: transparent;
+    width: 80%;
+    &:focus {
+      outline: none;
+    }
+    // &::placeholder{
+    //   color:#fff;
+    //   opacity:1
+    // }
+  }
+}

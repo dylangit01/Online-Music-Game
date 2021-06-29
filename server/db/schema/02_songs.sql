@@ -1,0 +1,10 @@
+DROP TABLE IF EXISTS songs CASCADE;
+
+CREATE TABLE songs(
+    id SERIAL PRIMARY KEY NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    artist VARCHAR(255) NOT NULL,
+    spotify_id VARCHAR(255) NOT NULL,
+    album_photo VARCHAR(255) NOT NULL,
+    preview_url VARCHAR(255) NOT NULL
+);
