@@ -2,7 +2,7 @@
 
 DROP THE BEAT is a simple but competitive live multiplayer “name that song” game. Two players can join host's chat room and guess the songs' title simultaneously.
 
-Deployed version: https://drop-the-beat.netlify.app/
+Deployed version: https://online-music-game.netlify.app/
 
 ![Home page](https://github.com/dylangit01/DROP-THE-BEAT/blob/main/client/gifs/home-page.gif?raw=true "Optional title")
 ![Select playlist](https://github.com/dylangit01/DROP-THE-BEAT/blob/main/client/gifs/select-playlist.gif?raw=true "Optional title")
