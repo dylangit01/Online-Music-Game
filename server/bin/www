@@ -25,7 +25,7 @@ var server = http.createServer(app);
 const io = socketio(server, {
 	cors: {
 		// origin: 'http://localhost:3000',
-		origin: 'https://online-music-game.netlify.app/',
+		origin: 'https://online-music-game.netlify.app',
 		// origin: '*',
 		methods: ['GET', 'POST'],
 	},
